@@ -1,3 +1,3 @@
 # redBuffer_SNLI
 SNLI_task
-extract zip folder-
+Extract zip folder (snli_1.0)
