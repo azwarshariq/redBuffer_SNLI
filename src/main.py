@@ -1,4 +1,5 @@
 import pandas as pd
+import joblib
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.linear_model import LogisticRegression
@@ -30,7 +31,7 @@ def train_model_naive(X_train, y_train, X_test, y_test):
 
     # Testing
     print(classification_report(y_test, y_pred))
-
+    return model
 
 def train_model_logistic(X_train, y_train, X_test, y_test):
 
@@ -59,7 +60,7 @@ if __name__ == "__main__":
 
     #training data
     preprocessed_data = data_preprocessing('snli_1.0/snli_1.0_train.jsonl')
-    preprocessed_data = preprocessed_data[:10000]
+    preprocessed_data = preprocessed_data[:5000]
 
     vectorizer = TfidfVectorizer()
     combined_sentences_training = preprocessed_data['sentence1'] + ' ' + preprocessed_data['sentence2']
@@ -71,15 +72,28 @@ if __name__ == "__main__":
 
     #testing data
     test_data = data_preprocessing('snli_1.0/snli_1.0_test.jsonl')
-    test_data = test_data[:10000]
+    test_data = test_data[:5000]
     #vectorization testing
     combined_sentences_testing = test_data['sentence1'] + ' ' + test_data['sentence2']
     test_sentence_features = vectorizer.transform(combined_sentences_testing)
     test_labels = test_data['gold_label']
 
     #Naive Bayes
-    train_model_naive(sentence_features_training, labels_training, test_sentence_features, test_labels)
-    
+    model = train_model_naive(sentence_features_training, labels_training, test_sentence_features, test_labels)
+
+
+    #manual passing
+    '''
+    sentence = 'Sphinx of black quartz, hear my vow'
+    sentence_features = vectorizer.transform([sentence])
+    temp = model.predict(sentence_features.toarray())
+    print(temp)
+
+    joblib.dump(vectorizer, 'vectorizer.joblib')
+    joblib.dump(model, 'model.joblib')
+
+    print('model and vectorizer stored')
+    '''
     #Logistic Regression
     train_model_logistic(sentence_features_training, labels_training, test_sentence_features, test_labels)
     
