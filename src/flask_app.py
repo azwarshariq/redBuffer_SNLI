@@ -2,8 +2,8 @@ from flask import Flask, request, jsonify
 import joblib
 
 # Load the vectorizer and model
-vectorizer = joblib.load('vectorizer.joblib')
-model = joblib.load('model.joblib')
+vectorizer = joblib.load('models/vectorizer.joblib')
+model = joblib.load('models/model.joblib')
 
 # Create a Flask app
 app = Flask(__name__)
